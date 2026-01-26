@@ -19,10 +19,16 @@ export const CreateRoomSchema = t.Object({
     capacity: t.Number(),
     description: t.Optional(t.Nullable(t.String())),
     isActive: t.Optional(t.Boolean()),
-    images: t.Optional(t.Array(t.String())) // Array of URLs for creation
+    images: t.Optional(t.Files()) // Accept files for multipart/form-data
 })
 
-export const UpdateRoomSchema = t.Partial(CreateRoomSchema);
+export const UpdateRoomSchema = t.Partial(t.Object({
+    name: t.String(),
+    capacity: t.Number(),
+    description: t.Nullable(t.String()),
+    isActive: t.Boolean(),
+    images: t.Files()
+}));
 
 export type Room = typeof RoomSchema.static;
 export type CreateRoom = typeof CreateRoomSchema.static;

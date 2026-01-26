@@ -40,5 +40,5 @@ yarn-error.log*
 **/*.log
 package-lock.json
 **/*.bun
-/src/providers/database/generated"
+/src/providers/database/generated
 /dist
