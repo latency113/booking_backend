@@ -4,10 +4,17 @@ import { staticPlugin } from "@elysiajs/static";
 import { Elysia } from "elysia";
 import { controllers } from "./features/controllers";
 
+import { join } from "path";
+
+import { join } from "path";
+
 const port = Number(process.env.PORT || 3000);
 const app = new Elysia()
 .use(cors())
-.use(staticPlugin())
+.get("/public/*", ({ params }) => {
+    const path = join(process.cwd(), "public", params["*"]);
+    return Bun.file(path);
+})
 .use(swagger({
   path: "/docs",
 }))

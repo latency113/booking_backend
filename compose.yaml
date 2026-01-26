@@ -9,6 +9,8 @@ services:
       - PORT=9990
     env_file:
       - .env
+    volumes:
+      - ./uploads:/app/public/uploads
     networks:
       - db-network
     restart: always
@@ -30,3 +32,6 @@ networks:
   db-network:
     external: true
     name: databases_db-network
+
+volumes:
+  uploads:

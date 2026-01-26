@@ -12,29 +12,42 @@ export namespace RoomService {
   };
 
   export const createRoom = async (data: any) => {
+    console.log("Creating room with data:", data);
     let imageUrls: string[] = [];
     if (data.images) {
       const files = Array.isArray(data.images) ? data.images : [data.images];
-      imageUrls = await UploadService.uploadMultiple(files);
+      // Filter out empty objects or invalid files
+      const validFiles = files.filter(f => f && (f instanceof File || f.size > 0));
+      console.log(`Found ${validFiles.length} valid files to upload`);
+      imageUrls = await UploadService.uploadMultiple(validFiles);
     }
 
+    console.log("Generated image URLs:", imageUrls);
+
+    const { images, ...rest } = data; // Remove original images from spread
     return RoomRepository.create({
-      ...data,
-      capacity: Number(data.capacity), // Ensure number if from multipart
+      ...rest,
+      capacity: Number(data.capacity),
       isActive: data.isActive === 'true' || data.isActive === true,
       images: imageUrls,
     });
   };
 
   export const updateRoom = async (id: string, data: any) => {
+    console.log(`Updating room ${id} with data:`, data);
     let imageUrls: string[] | undefined = undefined;
     if (data.images) {
       const files = Array.isArray(data.images) ? data.images : [data.images];
-      imageUrls = await UploadService.uploadMultiple(files);
+      const validFiles = files.filter(f => f && (f instanceof File || f.size > 0));
+      console.log(`Found ${validFiles.length} valid files to upload for update`);
+      imageUrls = await UploadService.uploadMultiple(validFiles);
     }
 
+    console.log("Generated image URLs for update:", imageUrls);
+
+    const { images, ...rest } = data; // Remove original images from spread
     return RoomRepository.update(id, {
-      ...data,
+      ...rest,
       capacity: data.capacity ? Number(data.capacity) : undefined,
       isActive: data.isActive !== undefined ? (data.isActive === 'true' || data.isActive === true) : undefined,
       images: imageUrls,

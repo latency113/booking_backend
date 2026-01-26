@@ -23,4 +23,5 @@ EXPOSE 9990
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/prisma /app/prisma
 COPY --from=builder /app/src/providers/database/generated /app/src/providers/database/generated
+RUN mkdir -p /app/public/uploads
 CMD [ "bun", "start" ]
