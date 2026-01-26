@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider   = "prisma-client"
+  output     = "../src/providers/database/generated"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// =======================
+// ENUMS
+// =======================
+enum Role {
+  USER // ผู้ใช้งานทั่วไป
+  HEAD_BUILDING // หัวหน้างานอาคาร
+  HEAD_MEDIA // หัวหน้างานสื่อการเรียนการสอน
+  ADMIN // ผู้ดูแลระบบ
+}
+
+enum BookingStatus {
+  PENDING // รออนุมัติ
+  APPROVED // อนุมัติ
+  REJECTED // ปฏิเสธ
+  CANCELLED // ยกเลิก
+}
+
+enum EmailStatus {
+  PENDING // รอส่ง
+  SENT // ส่งสำเร็จ
+  FAILED // ส่งไม่สำเร็จ
+}
+
+enum EmailType {
+  BOOKING_REQUEST // แจ้งคำขอจองใหม่
+  BOOKING_APPROVED // แจ้งอนุมัติ
+  BOOKING_REJECTED // แจ้งปฏิเสธ
+  BOOKING_CANCELLED // แจ้งยกเลิก
+}
+
+// =======================
+// USER
+// =======================
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  fullName  String
+  email     String?  @unique
+  role      Role
+  createdAt DateTime @default(now())
+
+  bookings           Booking[]
+  notices            Notification[]
+  approvals          Approval[]
+  emailNotifications EmailNotification[]
+}
+
+// =======================
+// MEETING ROOM
+// =======================
+model Room {
+  id          String  @id @default(uuid())
+  name        String
+  capacity    Int
+  description String?
+  isActive    Boolean @default(true)
+
+  images     RoomImage[]
+  bookings   Booking[]
+  equipments RoomEquipment[]
+}
+
+model RoomImage {
+  id     String @id @default(uuid())
+  roomId String
+  url    String
+
+  room Room @relation(fields: [roomId], references: [id])
+}
+
+// =======================
+// EQUIPMENT (Master Data)
+// =======================
+model Equipment {
+  id     String  @id @default(uuid())
+  name   String
+  detail String?
+
+  rooms    RoomEquipment[]
+  requests BookingEquipment[]
+}
+
+// =======================
+// ROOM - EQUIPMENT (Many-to-Many)
+// =======================
+model RoomEquipment {
+  roomId      String
+  equipmentId String
+
+  room      Room      @relation(fields: [roomId], references: [id])
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@id([roomId, equipmentId])
+}
+
+// =======================
+// BOOKING
+// =======================
+model Booking {
+  id         String        @id @default(uuid())
+  userId     String
+  roomId     String
+  startTime  DateTime
+  endTime    DateTime
+  purpose    String
+  roomSetup  String
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  approvedAt DateTime?
+
+  user               User                @relation(fields: [userId], references: [id])
+  room               Room                @relation(fields: [roomId], references: [id])
+  equipments         BookingEquipment[]
+  approvals          Approval[]
+  emailNotifications EmailNotification[]
+}
+
+// =======================
+// BOOKING - EQUIPMENT (อุปกรณ์ที่ร้องขอ)
+// =======================
+model BookingEquipment {
+  bookingId   String
+  equipmentId String
+  quantity    Int    @default(1)
+
+  booking   Booking   @relation(fields: [bookingId], references: [id])
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@id([bookingId, equipmentId])
+}
+
+// =======================
+// APPROVAL (หัวหน้างานอาคาร)
+// =======================
+model Approval {
+  id         String        @id @default(uuid())
+  bookingId  String
+  approverId String
+  decision   BookingStatus
+  comment    String?
+  decidedAt  DateTime      @default(now())
+
+  booking  Booking @relation(fields: [bookingId], references: [id])
+  approver User    @relation(fields: [approverId], references: [id])
+}
+
+// =======================
+// NOTIFICATION
+// =======================
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// =======================
+// SYSTEM CONFIG
+// =======================
+model SystemConfig {
+  id                 String  @id @default(uuid())
+  maxBookingHours    Int
+  advanceBookingDays Int
+  enableNotification Boolean @default(true)
+}
+
+model EmailNotification {
+  id        String      @id @default(uuid())
+  userId    String
+  bookingId String?
+  email     String
+  subject   String
+  message   String
+  type      EmailType
+  status    EmailStatus @default(PENDING)
+  errorMsg  String?
+  sentAt    DateTime?
+  createdAt DateTime    @default(now())
+
+  user    User     @relation(fields: [userId], references: [id])
+  booking Booking? @relation(fields: [bookingId], references: [id])
+}
