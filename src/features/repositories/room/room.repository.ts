@@ -66,9 +66,29 @@ export namespace RoomRepository {
   };
 
   export const deleteById = async (id: string) => {
-    return prisma.room.delete({
-      where: { id },
+    // 1. Get all bookings for this room to clean up their sub-relations
+    const bookings = await prisma.booking.findMany({
+      where: { roomId: id },
+      select: { id: true }
     });
+    const bookingIds = bookings.map(b => b.id);
+
+    return prisma.$transaction([
+      // Clean up relations for all bookings in this room
+      prisma.bookingEquipment.deleteMany({ where: { bookingId: { in: bookingIds } } }),
+      prisma.approval.deleteMany({ where: { bookingId: { in: bookingIds } } }),
+      prisma.emailNotification.deleteMany({ where: { bookingId: { in: bookingIds } } }),
+      prisma.booking.deleteMany({ where: { roomId: id } }),
+      
+      // Clean up room-specific relations
+      prisma.roomEquipment.deleteMany({ where: { roomId: id } }),
+      prisma.roomImage.deleteMany({ where: { roomId: id } }),
+      
+      // Finally delete the room
+      prisma.room.delete({
+        where: { id },
+      }),
+    ]);
   };
 
   export const assignEquipment = async (roomId: string, equipmentId: string) => {
