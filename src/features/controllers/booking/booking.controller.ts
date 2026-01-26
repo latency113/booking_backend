@@ -56,8 +56,12 @@ export const BookingController = new Elysia({ prefix: "/bookings" })
     "/",
     async ({ body, user, set }) => {
       try {
+        if (!user) {
+          set.status = 401;
+          return { message: "User not authenticated" };
+        }
         set.status = 201;
-        return await BookingService.createBooking(user?.id as string, body);
+        return await BookingService.createBooking(user.id, body);
       } catch (error: any) {
         set.status = 400;
         return { message: error.message };
