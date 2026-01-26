@@ -49,18 +49,28 @@ enum EmailType {
 // USER
 // =======================
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  password  String
-  fullName  String
-  email     String?  @unique
-  role      Role
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  username     String   @unique
+  password     String
+  fullName     String
+  email        String?  @unique
+  role         Role
+  departmentId String?
+  createdAt    DateTime @default(now())
 
+  department         Department?         @relation(fields: [departmentId], references: [id])
   bookings           Booking[]
   notices            Notification[]
   approvals          Approval[]
   emailNotifications EmailNotification[]
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  users User[]
 }
 
 // =======================

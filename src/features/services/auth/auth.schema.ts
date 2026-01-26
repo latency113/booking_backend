@@ -12,6 +12,10 @@ export const AuthResponseSchema = t.Object({
         username: t.String(),
         fullName: t.String(),
         role: t.String(),
+        departmentId: t.Optional(t.Nullable(t.String())),
+        department: t.Optional(t.Nullable(t.Object({
+            name: t.String()
+        })))
     })
 })
 

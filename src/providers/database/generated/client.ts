@@ -50,6 +50,11 @@ path.join(process.cwd(), "src/providers/database/generated/libquery_engine-darwi
  */
 export type User = Prisma.UserModel
 /**
+ * Model Department
+ * 
+ */
+export type Department = Prisma.DepartmentModel
+/**
  * Model Room
  * 
  */

@@ -12,11 +12,11 @@ export namespace UserService {
 
   export const createUser = async (user: CreateUser) => {
     try {
-      const { email, username, password, fullName } = user;
+      const { email, username, password, fullName, departmentId } = user;
       const hashedPassword = await Bun.password.hash(password, {
         algorithm: "argon2id",
       });
-      return await UserRepository.createUser(email, username, hashedPassword, fullName);
+      return await UserRepository.createUser(email, username, hashedPassword, fullName, departmentId);
     } catch (error: any) {
       if (error.code === "P2002") {
         const target = error.meta?.target || [];
@@ -33,7 +33,7 @@ export namespace UserService {
 
   export const updateUserById = async (id: string, data: UpdateUser) => {
     try {
-      const { email, username, password, fullName, role } = data;
+      const { email, username, password, fullName, role, departmentId } = data;
       let hashedPassword = password;
       if (password) {
         hashedPassword = await Bun.password.hash(password, {
@@ -47,6 +47,7 @@ export namespace UserService {
         hashedPassword,
         fullName,
         role,
+        departmentId,
       );
     } catch (error: any) {
       if (error.code === "P2002") {

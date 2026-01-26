@@ -2,11 +2,14 @@ import prisma from "../../../providers/database/database.provider";
 
 export namespace UserRepository {
   export const findUsers = async () => {
-    return prisma.user.findMany();
+    return prisma.user.findMany({
+      include: { department: true }
+    });
   };
   export const findUserById = async (id: string) => {
     return prisma.user.findUnique({
       where: { id },
+      include: { department: true }
     });
   };
 
@@ -15,6 +18,7 @@ export namespace UserRepository {
     username: string,
     password: string,
     fullName: string,
+    departmentId?: string | null,
   ) => {
     return prisma.user.create({
       data: {
@@ -22,6 +26,7 @@ export namespace UserRepository {
         username,
         password,
         fullName,
+        departmentId,
         role: "USER",
       },
     });
@@ -34,6 +39,7 @@ export namespace UserRepository {
     password?: string,
     fullName?: string,
     role?: "USER" | "ADMIN" | "HEAD_BUILDING" | "HEAD_MEDIA",
+    departmentId?: string | null,
   ) => {
     return prisma.user.update({
       where: { id },
@@ -43,6 +49,7 @@ export namespace UserRepository {
         password,
         fullName,
         role,
+        departmentId,
       },
     });
   }
@@ -50,6 +57,7 @@ export namespace UserRepository {
   export const findUserByUsername = async (username: string) => {
     return prisma.user.findUnique({
       where: { username },
+      include: { department: true }
     });
   };
 

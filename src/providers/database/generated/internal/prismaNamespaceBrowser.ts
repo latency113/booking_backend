@@ -50,6 +50,7 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Department: 'Department',
   Room: 'Room',
   RoomImage: 'RoomImage',
   Equipment: 'Equipment',
@@ -85,10 +86,20 @@ export const UserScalarFieldEnum = {
   fullName: 'fullName',
   email: 'email',
   role: 'role',
+  departmentId: 'departmentId',
   createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const DepartmentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
 
 
 export const RoomScalarFieldEnum = {
@@ -224,10 +235,19 @@ export const UserOrderByRelevanceFieldEnum = {
   username: 'username',
   password: 'password',
   fullName: 'fullName',
-  email: 'email'
+  email: 'email',
+  departmentId: 'departmentId'
 } as const
 
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+
+
+export const DepartmentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type DepartmentOrderByRelevanceFieldEnum = (typeof DepartmentOrderByRelevanceFieldEnum)[keyof typeof DepartmentOrderByRelevanceFieldEnum]
 
 
 export const RoomOrderByRelevanceFieldEnum = {

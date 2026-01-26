@@ -25,7 +25,9 @@ export const AuthController = new Elysia({ prefix: "/auth" })
                     id: user.id,
                     username: user.username,
                     fullName: user.fullName,
-                    role: user.role
+                    role: user.role,
+                    departmentId: user.departmentId,
+                    department: user.department ? { name: user.department.name } : undefined
                 }
             };
         } catch (error: any) {
