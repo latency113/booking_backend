@@ -2,6 +2,7 @@ import { t } from "elysia";
 import { UserSchema } from "../user/user.schema";
 import { RoomSchema } from "../room/room.schema";
 import { EquipmentSchema } from "../equipment/equipment.schema";
+import { DepartmentSchema } from "../department/department.schema";
 
 export const BookingStatusEnum = t.UnionEnum(["PENDING", "APPROVED", "REJECTED", "CANCELLED"]);
 
@@ -18,6 +19,11 @@ export const BookingSchema = t.Object({
     roomId: t.String(),
     startTime: t.Date(),
     endTime: t.Date(),
+    participants: t.Number(),
+    phone: t.Optional(t.Nullable(t.String())),
+    bookerName: t.Optional(t.Nullable(t.String())),
+    position: t.Optional(t.Nullable(t.String())),
+    department: t.Optional(t.Nullable(t.String())),
     purpose: t.String(),
     roomSetup: t.String(),
     status: BookingStatusEnum,
@@ -25,6 +31,7 @@ export const BookingSchema = t.Object({
     approvedAt: t.Optional(t.Nullable(t.Date())),
     user: t.Optional(UserSchema),
     room: t.Optional(RoomSchema),
+    departments: t.Optional(t.Nullable(DepartmentSchema)),
     equipments: t.Optional(t.Array(BookingEquipmentSchema))
 })
 
@@ -37,6 +44,11 @@ export const CreateBookingSchema = t.Object({
     roomId: t.String(),
     startTime: t.String(), // input as string then convert to Date
     endTime: t.String(),
+    participants: t.Number({ minimum: 1 }),
+    phone: t.Optional(t.String()),
+    bookerName: t.Optional(t.String()),
+    position: t.Optional(t.String()),
+    department: t.Optional(t.String()),
     purpose: t.String(),
     roomSetup: t.String(),
     equipments: t.Optional(t.Array(CreateBookingEquipmentSchema))

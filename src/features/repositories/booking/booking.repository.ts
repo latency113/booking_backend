@@ -6,6 +6,7 @@ export namespace BookingRepository {
       include: {
         user: true,
         room: true,
+        departments: true,
         equipments: {
           include: {
             equipment: true,
@@ -24,6 +25,7 @@ export namespace BookingRepository {
       include: {
         user: true,
         room: true,
+        departments: true,
         equipments: {
           include: {
             equipment: true,
@@ -43,6 +45,7 @@ export namespace BookingRepository {
       where: { userId },
       include: {
         room: true,
+        departments: true,
         equipments: {
           include: {
             equipment: true,
@@ -60,6 +63,11 @@ export namespace BookingRepository {
     roomId: string;
     startTime: Date;
     endTime: Date;
+    participants: number;
+    phone?: string;
+    bookerName?: string;
+    position?: string;
+    department?: string;
     purpose: string;
     roomSetup: string;
     equipments?: { equipmentId: string; quantity: number }[];
@@ -104,6 +112,11 @@ export namespace BookingRepository {
       roomId?: string;
       startTime?: Date;
       endTime?: Date;
+      participants?: number;
+      phone?: string;
+      bookerName?: string;
+      position?: string;
+      department?: string;
       purpose?: string;
       roomSetup?: string;
       equipments?: { equipmentId: string; quantity: number }[];

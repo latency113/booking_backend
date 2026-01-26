@@ -70,7 +70,8 @@ model Department {
   name      String   @unique
   createdAt DateTime @default(now())
 
-  users User[]
+  users    User[]
+  bookings Booking[]
 }
 
 // =======================
@@ -125,19 +126,25 @@ model RoomEquipment {
 // BOOKING
 // =======================
 model Booking {
-  id         String        @id @default(uuid())
-  userId     String
-  roomId     String
-  startTime  DateTime
-  endTime    DateTime
-  purpose    String        @db.Text
-  roomSetup  String
-  status     BookingStatus @default(PENDING)
-  createdAt  DateTime      @default(now())
-  approvedAt DateTime?
+  id           String        @id @default(uuid())
+  userId       String
+  roomId       String
+  startTime    DateTime
+  endTime      DateTime
+  participants Int
+  phone        String?
+  bookerName   String?
+  position     String?
+  department   String?
+  purpose      String        @db.Text
+  roomSetup    String
+  status       BookingStatus @default(PENDING)
+  createdAt    DateTime      @default(now())
+  approvedAt   DateTime?
 
   user               User                @relation(fields: [userId], references: [id])
   room               Room                @relation(fields: [roomId], references: [id])
+  departments        Department?         @relation(fields: [department], references: [id])
   equipments         BookingEquipment[]
   approvals          Approval[]
   emailNotifications EmailNotification[]

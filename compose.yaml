@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./uploads:/app/public/uploads
+      - uploads_data:/app/public/uploads
     networks:
       - db-network
     restart: always
@@ -34,4 +34,5 @@ networks:
     name: databases_db-network
 
 volumes:
-  uploads:
+  uploads_data:
+    driver: local
