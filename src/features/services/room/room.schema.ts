@@ -16,17 +16,17 @@ export const RoomSchema = t.Object({
 
 export const CreateRoomSchema = t.Object({
     name: t.String(),
-    capacity: t.Number(),
+    capacity: t.Numeric(), // Handles "1" -> 1
     description: t.Optional(t.Nullable(t.String())),
-    isActive: t.Optional(t.Boolean()),
-    images: t.Optional(t.Files()) // Accept files for multipart/form-data
+    isActive: t.Optional(t.Any()), // Handles "true" -> true (will be converted in service)
+    images: t.Optional(t.Files())
 })
 
 export const UpdateRoomSchema = t.Partial(t.Object({
     name: t.String(),
-    capacity: t.Number(),
+    capacity: t.Numeric(),
     description: t.Nullable(t.String()),
-    isActive: t.Boolean(),
+    isActive: t.Any(),
     images: t.Files()
 }));
 
