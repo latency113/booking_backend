@@ -130,7 +130,7 @@ model Booking {
   roomId     String
   startTime  DateTime
   endTime    DateTime
-  purpose    String
+  purpose    String        @db.Text
   roomSetup  String
   status     BookingStatus @default(PENDING)
   createdAt  DateTime      @default(now())
@@ -201,7 +201,7 @@ model EmailNotification {
   bookingId String?
   email     String
   subject   String
-  message   String
+  message   String      @db.Text
   type      EmailType
   status    EmailStatus @default(PENDING)
   errorMsg  String?

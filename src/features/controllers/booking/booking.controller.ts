@@ -57,7 +57,11 @@ export const BookingController = new Elysia({ prefix: "/bookings" })
     async ({ body, user, set }) => {
       try {
         set.status = 201;
-        return await BookingService.createBooking(user?.id as string, body);
+        const userId = body.userId || user?.id;
+        if (!userId) {
+          throw new Error("User ID is required. Please login or provide userId in body.");
+        }
+        return await BookingService.createBooking(userId as string, body);
       } catch (error: any) {
         set.status = 400;
         return { message: error.message };

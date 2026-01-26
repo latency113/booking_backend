@@ -34,6 +34,7 @@ export const CreateBookingEquipmentSchema = t.Object({
 })
 
 export const CreateBookingSchema = t.Object({
+    userId: t.Optional(t.String()),
     roomId: t.String(),
     startTime: t.String(), // input as string then convert to Date
     endTime: t.String(),
