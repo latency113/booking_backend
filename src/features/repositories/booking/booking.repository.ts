@@ -189,4 +189,48 @@ export namespace BookingRepository {
 
     return overlaps.length > 0;
   };
+
+  export const findByRoomAndDate = async (roomId: string, date: string) => {
+    const startOfDay = new Date(`${date}T00:00:00.000Z`);
+    const endOfDay = new Date(`${date}T23:59:59.999Z`);
+
+    return prisma.booking.findMany({
+      where: {
+        roomId,
+        OR: [
+          {
+            startTime: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+          },
+          {
+            endTime: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+          },
+          {
+            AND: [
+              { startTime: { lte: startOfDay } },
+              { endTime: { gte: endOfDay } },
+            ],
+          },
+        ],
+      },
+      include: {
+        user: true,
+        room: true,
+        departments: true,
+        equipments: {
+          include: {
+            equipment: true,
+          },
+        },
+      },
+      orderBy: {
+        startTime: "asc",
+      },
+    });
+  };
 }

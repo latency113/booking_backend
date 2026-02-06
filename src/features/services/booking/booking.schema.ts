@@ -25,12 +25,12 @@ export const BookingSchema = t.Object({
     position: t.Optional(t.Nullable(t.String())),
     department: t.Optional(t.Nullable(t.String())),
     purpose: t.String(),
-    roomSetup: t.String(),
+    room: t.String(),
     status: BookingStatusEnum,
     createdAt: t.Date(),
     approvedAt: t.Optional(t.Nullable(t.Date())),
     user: t.Optional(UserSchema),
-    room: t.Optional(RoomSchema),
+    roomLayoutId: t.Optional(t.String()),
     departments: t.Optional(t.Nullable(DepartmentSchema)),
     equipments: t.Optional(t.Array(BookingEquipmentSchema))
 })
@@ -50,7 +50,7 @@ export const CreateBookingSchema = t.Object({
     position: t.Optional(t.String()),
     department: t.Optional(t.String()),
     purpose: t.String(),
-    roomSetup: t.String(),
+    roomLayoutId: t.String(),
     equipments: t.Optional(t.Array(CreateBookingEquipmentSchema))
 })
 

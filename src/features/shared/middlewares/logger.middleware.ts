@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 
 export const loggerMiddleware = new Elysia()
     .onRequest(({ request }) => {
-        console.log(`[${new Date().toISOString()}] ${request.method} ${request.url}`);
+        console.log(`[${new Date().toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })}] ${request.method} ${request.url}`);
     })
     .onAfterHandle(({ request, set }) => {
         // Optional: log status code or duration

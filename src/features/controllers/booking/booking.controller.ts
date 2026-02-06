@@ -21,6 +21,22 @@ export const BookingController = new Elysia({ prefix: "/bookings" })
     }
   )
   .get(
+    "/room/:roomId",
+    async ({ params: { roomId }, query: { date } }) => {
+      return await BookingService.getBookingsByRoomAndDate(roomId, date);
+    },
+    {
+      isAuth: true,
+      params: t.Object({ roomId: t.String() }),
+      query: t.Object({
+        date: t.String({ pattern: "^\\d{4}-\\d{2}-\\d{2}$", default: new Date().toISOString().split("T")[0] }),
+      }),
+      response: t.Array(BookingSchema),
+      summary: "Get bookings by room and date",
+      tags: ["Bookings"],
+    }
+  )
+  .get(
     "/:id",
     async ({ params: { id }, user, set }) => {
       const booking = await BookingService.getBookingById(id);

@@ -9,6 +9,7 @@ import { NotificationController } from "./notification/notification.controller";
 import { SystemConfigController } from "./systemconfig/systemconfig.controller";
 import { DepartmentController } from "./department/department.controller";
 import { loggerMiddleware } from "../shared/middlewares/logger.middleware";
+import { RoomLayoutController } from "./roomlayout/roomlayout.controller";
 
 export const controllers = new Elysia({ prefix: "/api/v1" })
     .use(loggerMiddleware)
@@ -18,6 +19,7 @@ export const controllers = new Elysia({ prefix: "/api/v1" })
     .use(RoomController)
     .use(EquipmentController)
     .use(BookingController)
+    .use(RoomLayoutController)
     .use(ApprovalController)
     .use(NotificationController)
     .use(SystemConfigController)

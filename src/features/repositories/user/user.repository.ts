@@ -18,6 +18,7 @@ export namespace UserRepository {
     username: string,
     password: string,
     fullName: string,
+    role: "USER" | "ADMIN" | "HEAD_BUILDING" | "HEAD_MEDIA",
     departmentId?: string | null,
   ) => {
     return prisma.user.create({
@@ -27,7 +28,7 @@ export namespace UserRepository {
         password,
         fullName,
         departmentId,
-        role: "USER",
+        role,
       },
     });
   };

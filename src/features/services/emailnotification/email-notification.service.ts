@@ -65,7 +65,7 @@ export namespace EmailNotificationService {
           <p><b>Details:</b></p>
           <ul>
             <li>Purpose: ${booking.purpose}</li>
-            <li>Time: ${new Date(booking.startTime).toLocaleString()} - ${new Date(booking.endTime).toLocaleString()}</li>
+              <li>Time: ${new Date(booking.startTime).toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })} - ${new Date(booking.endTime).toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })}</li>
           </ul>
         `,
         type: "BOOKING_REQUEST",
@@ -106,7 +106,7 @@ export namespace EmailNotificationService {
         <p><b>Details:</b></p>
         <ul>
           <li>Purpose: ${booking.purpose}</li>
-          <li>Time: ${new Date(booking.startTime).toLocaleString()} - ${new Date(booking.endTime).toLocaleString()}</li>
+            <li>Time: ${new Date(booking.startTime).toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })} - ${new Date(booking.endTime).toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })}</li>
         </ul>
       `,
       type,

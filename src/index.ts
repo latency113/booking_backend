@@ -3,10 +3,9 @@ import swagger from "@elysiajs/swagger";
 import { staticPlugin } from "@elysiajs/static";
 import { Elysia } from "elysia";
 import { controllers } from "./features/controllers";
-
 import { join } from "path";
 
-import { join } from "path";
+process.env.TZ = "Asia/Bangkok";
 
 const port = Number(process.env.PORT || 3000);
 const app = new Elysia()
@@ -25,4 +24,4 @@ const app = new Elysia()
 
 console.log(
   `🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}/docs`
-);
+)

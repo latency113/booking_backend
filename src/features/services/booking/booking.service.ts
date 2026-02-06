@@ -17,6 +17,10 @@ export namespace BookingService {
     return BookingRepository.findByUserId(userId);
   };
 
+  export const getBookingsByRoomAndDate = async (roomId: string, date: string) => {
+    return BookingRepository.findByRoomAndDate(roomId, date);
+  };
+
   export const createBooking = async (userId: string, data: CreateBooking) => {
     const startTime = new Date(data.startTime);
     const endTime = new Date(data.endTime);

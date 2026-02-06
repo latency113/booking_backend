@@ -12,11 +12,11 @@ export namespace UserService {
 
   export const createUser = async (user: CreateUser) => {
     try {
-      const { email, username, password, fullName, departmentId } = user;
+      const { email, username, password, fullName, role, departmentId } = user;
       const hashedPassword = await Bun.password.hash(password, {
         algorithm: "argon2id",
       });
-      return await UserRepository.createUser(email, username, hashedPassword, fullName, departmentId);
+      return await UserRepository.createUser(email, username, hashedPassword, fullName, role, departmentId);
     } catch (error: any) {
       if (error.code === "P2002") {
         const target = error.meta?.target || [];
