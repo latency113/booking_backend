@@ -7,56 +7,56 @@ import { DepartmentSchema } from "../department/department.schema";
 export const BookingStatusEnum = t.UnionEnum(["PENDING", "APPROVED", "REJECTED", "CANCELLED"]);
 
 export const BookingEquipmentSchema = t.Object({
-    bookingId: t.String(),
-    equipmentId: t.String(),
-    quantity: t.Number(),
-    equipment: t.Optional(EquipmentSchema)
+  bookingId: t.String(),
+  equipmentId: t.String(),
+  quantity: t.Number(),
+  equipment: t.Optional(EquipmentSchema)
 })
 
 export const BookingSchema = t.Object({
-    id: t.String(),
-    userId: t.String(),
-    roomId: t.String(),
-    startTime: t.Date(),
-    endTime: t.Date(),
-    participants: t.Number(),
-    phone: t.Optional(t.Nullable(t.String())),
-    bookerName: t.Optional(t.Nullable(t.String())),
-    position: t.Optional(t.Nullable(t.String())),
-    department: t.Optional(t.Nullable(t.String())),
-    purpose: t.String(),
-    room: t.String(),
-    status: BookingStatusEnum,
-    createdAt: t.Date(),
-    approvedAt: t.Optional(t.Nullable(t.Date())),
-    user: t.Optional(UserSchema),
-    roomLayoutId: t.Optional(t.String()),
-    departments: t.Optional(t.Nullable(DepartmentSchema)),
-    equipments: t.Optional(t.Array(BookingEquipmentSchema))
+  id: t.String(),
+  userId: t.String(),
+  roomId: t.String(),
+  startTime: t.Date(),
+  endTime: t.Date(),
+  participants: t.Number(),
+  phone: t.Optional(t.Nullable(t.String())),
+  bookerName: t.Optional(t.Nullable(t.String())),
+  position: t.Optional(t.Nullable(t.String())),
+  department: t.Optional(t.Nullable(t.String())),
+  purpose: t.String(),
+  status: BookingStatusEnum,
+  createdAt: t.Date(),
+  approvedAt: t.Optional(t.Nullable(t.Date())),
+  user: t.Optional(UserSchema),
+  roomLayoutId: t.Optional(t.String()),
+  departments: t.Optional(t.Nullable(DepartmentSchema)),
+  equipments: t.Optional(t.Array(BookingEquipmentSchema))
 })
 
 export const CreateBookingEquipmentSchema = t.Object({
-    equipmentId: t.String(),
-    quantity: t.Number({ minimum: 1 })
+  equipmentId: t.String(),
+  quantity: t.Number({ minimum: 1 })
 })
 
 export const CreateBookingSchema = t.Object({
-    roomId: t.String(),
-    startTime: t.String(), // input as string then convert to Date
-    endTime: t.String(),
-    participants: t.Number({ minimum: 1 }),
-    phone: t.Optional(t.String()),
-    bookerName: t.Optional(t.String()),
-    position: t.Optional(t.String()),
-    department: t.Optional(t.String()),
-    purpose: t.String(),
-    roomLayoutId: t.String(),
-    equipments: t.Optional(t.Array(CreateBookingEquipmentSchema))
+  userId: t.String(),
+  roomId: t.String(),
+  startTime: t.String(), // input as string then convert to Date
+  endTime: t.String(),
+  participants: t.Number({ minimum: 1 }),
+  phone: t.Optional(t.String()),
+  bookerName: t.Optional(t.String()),
+  position: t.Optional(t.String()),
+  department: t.Optional(t.String()),
+  purpose: t.String(),
+  roomLayoutId: t.String(),
+  equipments: t.Optional(t.Array(CreateBookingEquipmentSchema))
 })
 
 export const UpdateBookingStatusSchema = t.Object({
-    status: BookingStatusEnum,
-    comment: t.Optional(t.String())
+  status: BookingStatusEnum,
+  comment: t.Optional(t.String())
 })
 
 export const UpdateBookingSchema = t.Partial(CreateBookingSchema);

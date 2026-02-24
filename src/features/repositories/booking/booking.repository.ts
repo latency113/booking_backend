@@ -69,7 +69,7 @@ export namespace BookingRepository {
     position?: string;
     department?: string;
     purpose: string;
-    roomSetup: string;
+    roomLayoutId: string;
     equipments?: { equipmentId: string; quantity: number }[];
   }) => {
     const { equipments, ...bookingData } = data;
@@ -79,11 +79,11 @@ export namespace BookingRepository {
         ...bookingData,
         equipments: equipments
           ? {
-              create: equipments.map((eq) => ({
-                equipmentId: eq.equipmentId,
-                quantity: eq.quantity,
-              })),
-            }
+            create: equipments.map((eq) => ({
+              equipmentId: eq.equipmentId,
+              quantity: eq.quantity,
+            })),
+          }
           : undefined,
       },
       include: {
@@ -118,7 +118,7 @@ export namespace BookingRepository {
       position?: string;
       department?: string;
       purpose?: string;
-      roomSetup?: string;
+      roomLayoutId?: string;
       equipments?: { equipmentId: string; quantity: number }[];
     }
   ) => {
@@ -130,12 +130,12 @@ export namespace BookingRepository {
         ...bookingData,
         equipments: equipments
           ? {
-              deleteMany: {},
-              create: equipments.map((eq) => ({
-                equipmentId: eq.equipmentId,
-                quantity: eq.quantity,
-              })),
-            }
+            deleteMany: {},
+            create: equipments.map((eq) => ({
+              equipmentId: eq.equipmentId,
+              quantity: eq.quantity,
+            })),
+          }
           : undefined,
       },
       include: {

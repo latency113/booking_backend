@@ -54,7 +54,7 @@ export namespace BookingService {
       position: data.position,
       department: data.department,
       purpose: data.purpose,
-      roomSetup: data.roomSetup,
+      roomLayoutId: data.roomLayoutId,
       equipments: data.equipments,
     });
 
@@ -91,7 +91,7 @@ export namespace BookingService {
         startTime || booking.startTime,
         endTime || booking.endTime
       );
-      
+
       // We should check if the overlap is NOT with the current booking itself
       // But BookingRepository.checkOverlap doesn't take an excludeId currently.
       // For simplicity in this logic, we assume checkOverlap might need to be smarter.
@@ -107,7 +107,7 @@ export namespace BookingService {
       position: data.position,
       department: data.department,
       purpose: data.purpose,
-      roomSetup: data.roomSetup,
+      roomLayoutId: data.roomLayoutId,
       equipments: data.equipments,
     });
   };
@@ -137,7 +137,7 @@ export namespace BookingService {
     }
 
     const updated = await BookingRepository.updateStatus(id, "CANCELLED");
-    
+
     // Log approval history
     await ApprovalRepository.create({
       bookingId: id,
@@ -162,7 +162,7 @@ export namespace BookingService {
     }
 
     const updated = await BookingRepository.updateStatus(id, "APPROVED", new Date());
-    
+
     await ApprovalRepository.create({
       bookingId: id,
       approverId,
