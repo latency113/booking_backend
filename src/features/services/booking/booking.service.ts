@@ -89,15 +89,16 @@ export namespace BookingService {
       const isOverlapping = await BookingRepository.checkOverlap(
         data.roomId || booking.roomId,
         startTime || booking.startTime,
-        endTime || booking.endTime
+        endTime || booking.endTime,
+        id // Exclude self from overlap check
       );
 
-      // We should check if the overlap is NOT with the current booking itself
-      // But BookingRepository.checkOverlap doesn't take an excludeId currently.
-      // For simplicity in this logic, we assume checkOverlap might need to be smarter.
+      if (isOverlapping) {
+        throw new Error("ห้องนี้มีการจองแล้วในช่วงเวลาดังกล่าว");
+      }
     }
 
-    return BookingRepository.update(id, {
+    const updated = await BookingRepository.update(id, {
       roomId: data.roomId,
       startTime,
       endTime,
@@ -108,8 +109,19 @@ export namespace BookingService {
       department: data.department,
       purpose: data.purpose,
       roomLayoutId: data.roomLayoutId,
+      status: "PENDING", // Reset to pending
+      approvedAt: null, // Clear approval time
       equipments: data.equipments,
     });
+
+    // Notify about the change/re-approval request
+    const fullBooking = await BookingRepository.findById(id);
+    const owner = await UserRepository.findUserById(booking.userId);
+    if (owner && fullBooking) {
+      EmailNotificationService.notifyBookingRequest(owner, fullBooking).catch(console.error);
+    }
+
+    return updated;
   };
 
   export const deleteBooking = async (id: string, userId: string, role: string) => {

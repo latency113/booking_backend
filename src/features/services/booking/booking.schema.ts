@@ -3,13 +3,14 @@ import { UserSchema } from "../user/user.schema";
 import { RoomSchema } from "../room/room.schema";
 import { EquipmentSchema } from "../equipment/equipment.schema";
 import { DepartmentSchema } from "../department/department.schema";
+import { RoomLayoutSchema } from "../roomlayout/roomlayout.schema";
 
 export const BookingStatusEnum = t.UnionEnum(["PENDING", "APPROVED", "REJECTED", "CANCELLED"]);
 
 export const BookingEquipmentSchema = t.Object({
   bookingId: t.String(),
   equipmentId: t.String(),
-  quantity: t.Number(),
+  quantity: t.Numeric(),
   equipment: t.Optional(EquipmentSchema)
 })
 
@@ -17,34 +18,35 @@ export const BookingSchema = t.Object({
   id: t.String(),
   userId: t.String(),
   roomId: t.String(),
-  startTime: t.Date(),
-  endTime: t.Date(),
-  participants: t.Number(),
+  startTime: t.Any(),
+  endTime: t.Any(),
+  participants: t.Numeric(),
   phone: t.Optional(t.Nullable(t.String())),
   bookerName: t.Optional(t.Nullable(t.String())),
   position: t.Optional(t.Nullable(t.String())),
   department: t.Optional(t.Nullable(t.String())),
   purpose: t.String(),
   status: BookingStatusEnum,
-  createdAt: t.Date(),
-  approvedAt: t.Optional(t.Nullable(t.Date())),
+  createdAt: t.Any(),
+  approvedAt: t.Optional(t.Nullable(t.Any())),
   user: t.Optional(UserSchema),
+  room: t.Optional(RoomSchema),
   roomLayoutId: t.Optional(t.String()),
+  roomLayout: t.Optional(RoomLayoutSchema),
   departments: t.Optional(t.Nullable(DepartmentSchema)),
   equipments: t.Optional(t.Array(BookingEquipmentSchema))
 })
 
 export const CreateBookingEquipmentSchema = t.Object({
   equipmentId: t.String(),
-  quantity: t.Number({ minimum: 1 })
+  quantity: t.Numeric({ minimum: 1 })
 })
 
 export const CreateBookingSchema = t.Object({
-  userId: t.String(),
   roomId: t.String(),
   startTime: t.String(), // input as string then convert to Date
   endTime: t.String(),
-  participants: t.Number({ minimum: 1 }),
+  participants: t.Numeric({ minimum: 1 }),
   phone: t.Optional(t.String()),
   bookerName: t.Optional(t.String()),
   position: t.Optional(t.String()),

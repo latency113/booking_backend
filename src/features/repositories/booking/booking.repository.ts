@@ -6,6 +6,7 @@ export namespace BookingRepository {
       include: {
         user: true,
         room: true,
+        roomLayout: true,
         departments: true,
         equipments: {
           include: {
@@ -25,6 +26,7 @@ export namespace BookingRepository {
       include: {
         user: true,
         room: true,
+        roomLayout: true,
         departments: true,
         equipments: {
           include: {
@@ -45,6 +47,7 @@ export namespace BookingRepository {
       where: { userId },
       include: {
         room: true,
+        roomLayout: true,
         departments: true,
         equipments: {
           include: {
@@ -119,6 +122,8 @@ export namespace BookingRepository {
       department?: string;
       purpose?: string;
       roomLayoutId?: string;
+      status?: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+      approvedAt?: Date | null;
       equipments?: { equipmentId: string; quantity: number }[];
     }
   ) => {
@@ -157,10 +162,12 @@ export namespace BookingRepository {
     roomId: string,
     startTime: Date,
     endTime: Date,
+    excludeId?: string
   ) => {
     const overlaps = await prisma.booking.findMany({
       where: {
         roomId,
+        id: excludeId ? { not: excludeId } : undefined,
         status: {
           in: ["PENDING", "APPROVED"],
         },
@@ -221,6 +228,7 @@ export namespace BookingRepository {
       include: {
         user: true,
         room: true,
+        roomLayout: true,
         departments: true,
         equipments: {
           include: {
